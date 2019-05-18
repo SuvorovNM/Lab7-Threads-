@@ -17,7 +17,9 @@ namespace Lab7__Threads_
         public Point position;
         Size background;
         public bool Hit = false;
-        public Ammo(Dir _dir, Point _pos, Size _bg)
+        public bool Kill = false;
+        public Tank Shooter;
+        public Ammo(Dir _dir, Point _pos, Size _bg, Tank _shooter)
         {
             image = Resource1.Ammo;
             position = _pos;
@@ -27,6 +29,7 @@ namespace Lab7__Threads_
                 image.RotateFlip(RotateFlipType.Rotate90FlipNone);
             }
             background = _bg;
+            Shooter = _shooter;
         }
         public void Move()
         {
@@ -52,18 +55,6 @@ namespace Lab7__Threads_
                         position.Y += 20;
                     else Hit = true;
                     break;
-            }
-        }
-        public void Play()
-        {
-            while (!Hit)
-            {
-                Move();
-                Thread.Sleep(300);
-            }
-            if (Hit)
-            {
-                Thread.CurrentThread.Abort();
             }
         }
         

@@ -9,21 +9,28 @@ using System.Drawing;
 
 namespace Lab7__Threads_
 {
-    [Synchronization]
-    class ImageExec : ContextBoundObject
+    class ImageExec
     {
-        public static void DrawTanks(Graphics g, List<UsualTank> tanks)
+        public static void DrawTanks(Graphics g, List<Tank> tanks)
         {
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
-            foreach (UsualTank t1 in tanks.ToArray())
+            foreach (Tank t1 in tanks.ToArray())
             {
                 if (t1.Died)
                 {
-                    //t1.TankView.
+                    if (t1 is UsualTank)
                     for (int i = 0; i < 80; i++)
                     {
                         for (int j = 0; j < 80; j++)
                             t1.TankView.SetPixel(i, j, Color.Red);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < 80; i++)
+                        {
+                            for (int j = 0; j < 80; j++)
+                                t1.TankView.SetPixel(i, j, Color.Blue);
+                        }
                     }
                 }
                 if (t1.state != State.Free)
@@ -32,7 +39,7 @@ namespace Lab7__Threads_
                         Thread.Sleep(20);
                     } while (t1.state != State.Free);
                 t1.state = State.OnRead;
-                Bitmap bmp = new Bitmap(t1.TankImage);
+                Bitmap bmp = new Bitmap(t1.TankView);
                 t1.state = State.Free;
                 g.DrawImage(bmp, new Rectangle(t1.position.X, t1.position.Y, 40, 40));
             }
